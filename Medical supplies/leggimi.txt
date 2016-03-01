@@ -1,0 +1,129 @@
+﻿La soluzione proposta si basa su una struttura dati modulare con:
+
+
+- un vettore di prodotti (typedef struct prodotto Prodotto): ogni
+  casella del 
+vettore identifica un prodotto,  descritto da una terna
+  di interi 
+(indice di prodotto, di categoria e di ditta)
+
+
+- tre tabelle di simboli, realizzate come ADT di prima categoria, 
+in
+  grado di gestire le corrispondenze nome-indice, per prodotti,
+  categorie e ditte.
+
+
+
+Vista la scelta modulare, il programma si suddivide in tre file:
+
+- il file principale (main.c) che funge da client rispetto a un modulo
+
+di tabella di simboli (ts.c, ts.h).
+
+- 
+
+il modulo TS fornisce un ADT di prima categoria che realizza 
+una
+ tabella di simboli, mediante vettore dinamico e ricerca lineare
+
+(soluzioni alternative sono: vettore ordinato con ricerca binaria 
+logaritmica,
+lista con ricerca lineare, BST con ricerca logaritmica, 
+tabella di
+ hash con ricerca in tempo costante, se opportunamente 
+dimensionata. Si ricordi che al momento della pubblicazione delle 
+specifiche non erano ancora stati trattatti né i BST, né le 
+tabelle di hash.).
+
+
+
+Il programma principale consta di una fase di acquisizione dei dati 
+e 
+di una risoluzione ricorsiva.
+
+
+
+* INPUT
+
+
+L'acquisizione dei dati (funzione input) carica i dati nel vettore
+ prod, 
+sovradimensionato (MAX_PROD), caricando contemporaneamente le 
+tabelle 
+di simboli, che vengono via via usate per passare da nomi a 
+indici 
+interi (nel vettore prod ci sono solamente indici).
+
+Al termine dell'acquisizione il vettore prod contiene le informazioni
+
+su tutti i prodotti (come indici), mentre le tre tabelle
+ 
+(tabCategorie, tabNomi, tabDitte) gestiscono le corrispondenze 
+nome
+-indice. 
+
+
+NOTA
+: sarebbe possibile una sola tabella di nomi (come 
+ADT 
+oppure direttamente integrata nella struttura dati), rendendo 
+tuttavia 
+necessari indici disgiunti per le tipologie diverse di dati 
+(cioè 
+indici per i prodotti distinti dagli indici delle categorie e 
+delle ditte).
+Tale soluzione non va esclusa, ma porterebbe a un vettore unico 
+per 
+dati di diverse tipologie. Si è quindi preferita una soluzione con tre
+
+tabelle distinte. La scelta dell'ADT di prima categoria ne facilita la
+
+realizzazione. 
+
+
+
+* SOLUZIONE
+
+
+Si utilizzano variabili locali, passate come parametro alla varie 
+funzioni.
+
+La funzione forniture (wrapper) serve unicamente per definire alcune 
+strutture 
+dati utilizzate dalla funzione ricorsiva, e chiamare 
+quest'ultima, 
+evitando che questi dettagli siano visibili direttamente al main.
+
+
+La funzione fornRicorsiva elabora la soluzione in modo ricorsivo.
+
+Ogni chiamata ricorsiva gestisce una delle categorie farmaceutiche: il
+
+parametro cat indica la categoria corrente, il parametro nC indica il
+
+numero totale di categorie. 
+Si è evitato di creare una struttura dati 
+con elenchi di prodotti per
+le varie categorie. Si esegue quindi una 
+iterazione per selezionare i
+ prodotti della categoria corrente, a 
+partire dall'elenco globale dei
+ prodotti.
+Si aggiorna dinamicamente 
+un vettore conteggi che, per ogni categoria, 
+tiene traccia di quanti 
+prodotti sono attualmente forniti da una data
+ ditta (questo vettore
+quindi funge da vettore delle occorrenze).
+Tale vettore consente un 
+pruning efficiente, direttemente al momento 
+dell'eventuale chiamata 
+ricorsiva. 
+La versione della funzione SENZA PRUNING non viene proposta. 
+La si 
+potrebbe realizzare semplicemente spostando il controllo sul numero
+
+massimo di prodotti per ditta dall'iterazione ricorsiva al caso 
+terminale.
+
